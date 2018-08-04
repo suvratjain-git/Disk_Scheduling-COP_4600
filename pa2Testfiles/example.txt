@@ -1,4 +1,4 @@
-Seek algorithm: FCFS
+Seek algorithm: SCAN
 	Lower cylinder:     0
 	Upper cylinder:   128
 	Init cylinder:    27
@@ -15,16 +15,16 @@ Seek algorithm: FCFS
 		Cylinder    50
 		Cylinder   100
 		Cylinder    11
-Servicing    84
-Servicing    77
-Servicing    46
-Servicing    75
-Servicing    94
-Servicing    97
-Servicing    82
-Servicing    22
-Servicing    26
-Servicing    50
-Servicing   100
-Servicing    11
-FCFS traversal count = 388
+Servicing 46
+Servicing 50
+Servicing 75
+Servicing 77
+Servicing 82
+Servicing 84
+Servicing 94
+Servicing 97
+Servicing 100
+Servicing 26
+Servicing 22
+Servicing 11
+SCAN traversal count = 218
