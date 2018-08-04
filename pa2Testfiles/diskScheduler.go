@@ -471,50 +471,259 @@ func c_scan(lowerCYL_L int, upperCYL_L int, initCYL_L int, cylinders_L []Cylinde
 
 }
 
-// func sstf(lowerCYL_L int, upperCYL_L int, initCYL_L int, cylinders_L []Cylinder)  {
+func look(lowerCYL_L int, upperCYL_L int, initCYL_L int, cylinders_L []Cylinder) {
 
-// 	//print initial outputs
-// 	fmt.Printf("Seek algorithm: SSTF\n")
-// 	fmt.Printf("\tLower cylinder: %5d\n", lowerCYL_L)
-// 	fmt.Printf("\tUpper cylinder: %5d\n", upperCYL_L)
-// 	fmt.Printf("\tInit cylinder: %5d\n", initCYL_L)
-// 	fmt.Printf("\tCylinder requests:\n")
+	//print initial outputs
+	fmt.Printf("Seek algorithm: LOOK\n")
+	fmt.Printf("\tLower cylinder: %5d\n", lowerCYL_L)
+	fmt.Printf("\tUpper cylinder: %5d\n", upperCYL_L)
+	fmt.Printf("\tInit cylinder: %5d\n", initCYL_L)
+	fmt.Printf("\tCylinder requests:\n")
 
-// 	//print list of cylinders
-// 	for i:=0; i<len(cylinders_L); i++ {
-// 		fmt.Printf("\t\tCylinder %5d\n", cylinders_L[i].ID)
-// 	}
+	for i:=0; i<len(cylinders_L); i++ {
+		fmt.Printf("\t\tCylinder %5d\n", cylinders_L[i].ID)
+	}
 
-// 	//add the previous requested cylinder in the cylinder list as well
-// 	var currentCylinder Cylinder
-// 	currentCylinder.ID = initCYL_L
-// 	cylinders_L = append(cylinders_L, currentCylinder)
+	//add the initially requested cylinder in the cylinder list
+	var currentCylinder Cylinder
+	currentCylinder.ID = initCYL_L
+	cylinders_L = append(cylinders_L, currentCylinder)
 
-// 	//sort Cylinders requests in the cylinder list with respect to ID and assign them indices in the slice
-// 	cylinders_L = sort(cylinders_L)
-// 	cylinders_L = resetIndex(cylinders_L)
+	// sort the cylinders with respect to their Request ID and get index of the initial cylinder in the sorted slice
+	cylinders_L, current_index := getInitCycIndex(sort(cylinders_L), initCYL_L)
+	
+	//remove initially requested cylinder from the slice and reset indices
+	cylinders_L = remove(cylinders_L, currentCylinder)
+	cylinders_L,_ = getInitCycIndex(sort(cylinders_L), initCYL_L)
 
-// 	fmt.Printf("Cylinder Requests (Sorted): %v\n", cylinders_L)
-
-// 	totalCylinderServiced := 0
-
-// 	var nextCylinderLeft Cylinder
-// 	var nextCylinderRight Cylinder
-// 	var nextCylinder Cylinder
-// 	var previousCylinder Cylinder
-
-// 	for totalCylinderServiced != len(cylinders_L) {
-
-// 		if(cylinders_L[i] == currentCylinder) {
-
-// 			//get the left and right index
+	traversalDistance := 0
+	start_processing := false
+	cylinder_services_completed := 0
+	previousRequest := initCYL_L
+	totalRequests := len(cylinders_L)
 
 
-// 		}
+	for i := lowerCYL_L; i < upperCYL_L; i++ {
+
+		//current cylinder after servicing initial cylinder
+		currentRequest := cylinders_L[current_index].ID
+
+		//don't start servicing the cylinders until the head is at the initial cylinder
+		if(i == initCYL_L) {
+			start_processing = true
+		}
+
+		if (currentRequest > lowerCYL_L && currentRequest < upperCYL_L) {
+
+			if(start_processing) {
+
+				//if current cylinder has not been serviced then service it and calculate the traversal distance
+				if(!cylinders_L[current_index].service_completed && cylinder_services_completed != totalRequests) {
+
+					fmt.Printf("Servicing %d\n", currentRequest)
+
+					traversalDistance += Abs(currentRequest - previousRequest)
+					
+					previousRequest = currentRequest
+
+					cylinder_services_completed++
+					cylinders_L[current_index].service_completed = true
+				
+
+					//enter this if statement when end of the cylinder list is reached but not all serivces are completed
+					if(currentRequest == cylinders_L[totalRequests - 1].ID && cylinder_services_completed != totalRequests) {
+
+						// currentRequest = upperCYL_L
+
+						// traversalDistance += Abs(currentRequest - previousRequest)
+
+						// previousRequest = currentRequest
+
+						//travel in reverse direction starting before initial cylinder
+						for i := initCYL_L-1; i > lowerCYL_L; i-- {
+
+							currentRequest = cylinders_L[current_index].ID
+
+							//service the cylinders not serviced
+							if(!cylinders_L[current_index].service_completed && currentRequest > lowerCYL_L) {	
+
+								fmt.Printf("Servicing %d\n", currentRequest)
+
+								traversalDistance += Abs(currentRequest - previousRequest)
+
+								previousRequest = currentRequest
+								
+								cylinder_services_completed++
+								cylinders_L[current_index].service_completed = true
+
+							}
+
+							if((current_index > 0) && cylinder_services_completed != totalRequests) {
+								current_index--
+							} else if (cylinder_services_completed == totalRequests) {
+								break
+							} else {
+								current_index = 0
+							}
+
+						}
 
 
+					}
 
-// 	}
+					if((current_index != len(cylinders_L) - 1) && cylinder_services_completed != totalRequests) {
+						current_index++
+					} else if (cylinder_services_completed == totalRequests) {
+						break
+					} else {
+						current_index = 0
+					}
+
+				} 
+
+			}
+
+		} else {
+
+			//display error message
+
+		}
+
+
+	}
+
+	//print traversal time
+	fmt.Printf("LOCK traversal count = %d\n", traversalDistance)
+
+}
+
+func c_look(lowerCYL_L int, upperCYL_L int, initCYL_L int, cylinders_L []Cylinder) {
+
+	//print initial outputs
+	fmt.Printf("Seek algorithm: C-LOOK\n")
+	fmt.Printf("\tLower cylinder: %5d\n", lowerCYL_L)
+	fmt.Printf("\tUpper cylinder: %5d\n", upperCYL_L)
+	fmt.Printf("\tInit cylinder: %5d\n", initCYL_L)
+	fmt.Printf("\tCylinder requests:\n")
+
+	for i:=0; i<len(cylinders_L); i++ {
+		fmt.Printf("\t\tCylinder %5d\n", cylinders_L[i].ID)
+	}
+
+	//add the initially requested cylinder in the cylinder list
+	var currentCylinder Cylinder
+	currentCylinder.ID = initCYL_L
+	cylinders_L = append(cylinders_L, currentCylinder)
+
+	// sort the cylinders with respect to their Request ID and get index of the initial cylinder in the sorted slice
+	cylinders_L, current_index := getInitCycIndex(sort(cylinders_L), initCYL_L)
+	
+	//remove initially requested cylinder from the slice and reset indices
+	cylinders_L = remove(cylinders_L, currentCylinder)
+	cylinders_L,_ = getInitCycIndex(sort(cylinders_L), initCYL_L)
+
+	traversalDistance := 0
+	start_processing := false
+	cylinder_services_completed := 0
+	previousRequest := initCYL_L
+	totalRequests := len(cylinders_L)
+
+
+	for i := lowerCYL_L; i < upperCYL_L; i++ {
+
+		//current cylinder after servicing initial cylinder
+		currentRequest := cylinders_L[current_index].ID
+
+		//don't start servicing the cylinders until the head is at the initial cylinder
+		if(i == initCYL_L) {
+			start_processing = true
+		}
+
+		if (currentRequest > lowerCYL_L && currentRequest < upperCYL_L) {
+
+			if(start_processing) {
+
+				//if current cylinder has not been serviced then service it and calculate the traversal distance
+				if(!cylinders_L[current_index].service_completed && cylinder_services_completed != totalRequests) {
+
+					fmt.Printf("Servicing %d\n", currentRequest)
+
+					traversalDistance += Abs(currentRequest - previousRequest)
+					previousRequest = currentRequest
+
+					cylinder_services_completed++
+					cylinders_L[current_index].service_completed = true
+				
+
+					//enter this if statement when end of the cylinder list is reached but not all serivces are completed
+					if(currentRequest == cylinders_L[totalRequests - 1].ID && cylinder_services_completed != totalRequests) {
+
+						// currentRequest = upperCYL_L
+
+						// traversalDistance += Abs(currentRequest - previousRequest)
+						// previousRequest = currentRequest
+
+						// //starting from 0
+						// currentRequest = lowerCYL_L
+						// traversalDistance += Abs(currentRequest - previousRequest)
+						// previousRequest = currentRequest
+
+						//travel in reverse direction starting before initial cylinder
+						for i := lowerCYL_L; i < upperCYL_L; i++ {
+
+							currentRequest = cylinders_L[current_index].ID
+
+							//service the cylinders not serviced
+							if(!cylinders_L[current_index].service_completed && currentRequest > lowerCYL_L) {	
+
+								fmt.Printf("Servicing %d\n", currentRequest)
+
+								traversalDistance += Abs(currentRequest - previousRequest)
+								previousRequest = currentRequest
+								
+								cylinder_services_completed++
+								cylinders_L[current_index].service_completed = true
+
+							}
+
+							if((current_index != len(cylinders_L) - 1) && cylinder_services_completed != totalRequests) {
+								current_index++
+							} else if (cylinder_services_completed == totalRequests) {
+								break
+							} else {
+								current_index = 0
+							}
+
+						}
+
+
+					}
+
+					if((current_index != len(cylinders_L) - 1) && cylinder_services_completed != totalRequests) {
+						current_index++
+					} else if (cylinder_services_completed == totalRequests) {
+						break
+					} else {
+						current_index = 0
+					}
+
+				} 
+
+			}
+
+		} else {
+
+			//display error message
+
+		}
+
+
+	}
+
+	//print traversal time
+	fmt.Printf("C-LOCK traversal count = %d\n", traversalDistance)
+
+}
 
 
 
@@ -533,11 +742,10 @@ func main() {
 		scan(lowerCYL, upperCYL, initCYL, cylinders)
 	} else if (requestedAlgorithm == "c-scan") {
 		c_scan(lowerCYL, upperCYL, initCYL, cylinders)
-	}
-	 // else if (requestedAlgorithm == "look") {
-	// 	look(lowerCYL, upperCYL, initCYL, cylinders)
-	// } else if (requestedAlgorithm == "c-look") {
-	// 	c_look(lowerCYL, upperCYL, initCYL, cylinders)
-	// }	
+	} else if (requestedAlgorithm == "look") {
+		look(lowerCYL, upperCYL, initCYL, cylinders)
+	} else if (requestedAlgorithm == "c-look") {
+		c_look(lowerCYL, upperCYL, initCYL, cylinders)
+	}	
    
  }
