@@ -231,33 +231,33 @@ func sstf(lowerCYL_L int, upperCYL_L int, initCYL_L int, cylinders_L []Cylinder)
 		fmt.Printf("\t\tCylinder %5d\n", cylinders_L[i].ID)
 	}
 
-	totalRequests  := len(cylinders_L)
-	traversalDistance := 0
-	previousRequest := initCYL_L
+	// totalRequests  := len(cylinders_L)
+	// traversalDistance := 0
+	// previousRequest := initCYL_L
 
-	for i := 0; i < totalRequests; i++ {
+	// for i := 0; i < totalRequests; i++ {
 
-		//get the current requested cylinder
-		currentRequest := cylinders_L[i].ID
+	// 	//get the current requested cylinder
+	// 	currentRequest := cylinders_L[i].ID
 
-		//if the requested cylinder is in bounds then process it, else generate error and continue
-		if ((currentRequest > lowerCYL_L) && (currentRequest < upperCYL_L)) {
+	// 	//if the requested cylinder is in bounds then process it, else generate error and continue
+	// 	if ((currentRequest > lowerCYL_L) && (currentRequest < upperCYL_L)) {
 
-			//Display current cylinder under service
-			fmt.Printf("Servicing %5d\n", currentRequest)
+	// 		//Display current cylinder under service
+	// 		fmt.Printf("Servicing %5d\n", currentRequest)
 
-			//calculate the traversal distance
-			traversalDistance += Abs(currentRequest - previousRequest)
+	// 		//calculate the traversal distance
+	// 		traversalDistance += Abs(currentRequest - previousRequest)
 
-			//update the previous request to current request
-			previousRequest = currentRequest		
+	// 		//update the previous request to current request
+	// 		previousRequest = currentRequest		
 
-		} else {
-			//generate error message 
-			fmt.Printf("ERROR! Cylinder Request out of bounds!\n")
-		}
+	// 	} else {
+	// 		//generate error message 
+	// 		fmt.Printf("ERROR! Cylinder Request out of bounds!\n")
+	// 	}
 
-	}
+	// }
 
 	//print traversal time
 	fmt.Printf("SSTF traversal count = %d\n", traversalDistance)
