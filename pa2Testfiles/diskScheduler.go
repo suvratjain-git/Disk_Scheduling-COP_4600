@@ -207,12 +207,60 @@ func fcfs(lowerCYL_L int, upperCYL_L int, initCYL_L int, cylinders_L []Cylinder)
 
 		} else {
 			//generate error message 
+			fmt.Printf("ERROR! Cylinder Request out of bounds!\n")
 		}
 
 	}
 
 	//print traversal time
 	fmt.Printf("FCFS traversal count = %d\n", traversalDistance)
+		
+}
+
+func sstf(lowerCYL_L int, upperCYL_L int, initCYL_L int, cylinders_L []Cylinder)  {
+
+	//print initial outputs
+	fmt.Printf("Seek algorithm: SSTF\n")
+	fmt.Printf("\tLower cylinder: %5d\n", lowerCYL_L)
+	fmt.Printf("\tUpper cylinder: %5d\n", upperCYL_L)
+	fmt.Printf("\tInit cylinder: %5d\n", initCYL_L)
+	fmt.Printf("\tCylinder requests:\n")
+
+	//print list of cylinders
+	for i:=0; i<len(cylinders_L); i++ {
+		fmt.Printf("\t\tCylinder %5d\n", cylinders_L[i].ID)
+	}
+
+	totalRequests  := len(cylinders_L)
+	traversalDistance := 0
+	previousRequest := initCYL_L
+
+	for i := 0; i < totalRequests; i++ {
+
+		//get the current requested cylinder
+		currentRequest := cylinders_L[i].ID
+
+		//if the requested cylinder is in bounds then process it, else generate error and continue
+		if ((currentRequest > lowerCYL_L) && (currentRequest < upperCYL_L)) {
+
+			//Display current cylinder under service
+			fmt.Printf("Servicing %5d\n", currentRequest)
+
+			//calculate the traversal distance
+			traversalDistance += Abs(currentRequest - previousRequest)
+
+			//update the previous request to current request
+			previousRequest = currentRequest		
+
+		} else {
+			//generate error message 
+			fmt.Printf("ERROR! Cylinder Request out of bounds!\n")
+		}
+
+	}
+
+	//print traversal time
+	fmt.Printf("SSTF traversal count = %d\n", traversalDistance)
 		
 }
 
@@ -331,6 +379,7 @@ func scan(lowerCYL_L int, upperCYL_L int, initCYL_L int, cylinders_L []Cylinder)
 		} else {
 
 			//display error message
+			fmt.Printf("ERROR! Cylinder Request out of bounds!\n")
 
 		}
 
@@ -459,6 +508,7 @@ func c_scan(lowerCYL_L int, upperCYL_L int, initCYL_L int, cylinders_L []Cylinde
 		} else {
 
 			//display error message
+			fmt.Printf("ERROR! Cylinder Request out of bounds!\n")
 
 		}
 
@@ -579,6 +629,7 @@ func look(lowerCYL_L int, upperCYL_L int, initCYL_L int, cylinders_L []Cylinder)
 		} else {
 
 			//display error message
+			fmt.Printf("ERROR! Cylinder Request out of bounds!\n")
 
 		}
 
@@ -696,7 +747,7 @@ func c_look(lowerCYL_L int, upperCYL_L int, initCYL_L int, cylinders_L []Cylinde
 
 		} else {
 
-			//display error message
+			fmt.Printf("ERROR! Cylinder Request out of bounds!\n")
 
 		}
 
@@ -719,7 +770,7 @@ func main() {
 	if(requestedAlgorithm == "fcfs") {
 		fcfs(lowerCYL, upperCYL, initCYL, cylinders)
 	} else if (requestedAlgorithm == "sstf") {
-	 	// sstf(lowerCYL, upperCYL, initCYL, cylinders)
+	 	sstf(lowerCYL, upperCYL, initCYL, cylinders)
 	} else if (requestedAlgorithm == "scan") {
 		scan(lowerCYL, upperCYL, initCYL, cylinders)
 	} else if (requestedAlgorithm == "c-scan") {
