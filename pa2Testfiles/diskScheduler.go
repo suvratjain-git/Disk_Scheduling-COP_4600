@@ -216,7 +216,6 @@ func fcfs(lowerCYL_L int, upperCYL_L int, initCYL_L int, cylinders_L []Cylinder)
 		
 }
 
-
 func scan(lowerCYL_L int, upperCYL_L int, initCYL_L int, cylinders_L []Cylinder) {
 
 	//print initial outputs
@@ -533,12 +532,6 @@ func look(lowerCYL_L int, upperCYL_L int, initCYL_L int, cylinders_L []Cylinder)
 					//enter this if statement when end of the cylinder list is reached but not all serivces are completed
 					if(currentRequest == cylinders_L[totalRequests - 1].ID && cylinder_services_completed != totalRequests) {
 
-						// currentRequest = upperCYL_L
-
-						// traversalDistance += Abs(currentRequest - previousRequest)
-
-						// previousRequest = currentRequest
-
 						//travel in reverse direction starting before initial cylinder
 						for i := initCYL_L-1; i > lowerCYL_L; i-- {
 
@@ -658,16 +651,6 @@ func c_look(lowerCYL_L int, upperCYL_L int, initCYL_L int, cylinders_L []Cylinde
 					//enter this if statement when end of the cylinder list is reached but not all serivces are completed
 					if(currentRequest == cylinders_L[totalRequests - 1].ID && cylinder_services_completed != totalRequests) {
 
-						// currentRequest = upperCYL_L
-
-						// traversalDistance += Abs(currentRequest - previousRequest)
-						// previousRequest = currentRequest
-
-						// //starting from 0
-						// currentRequest = lowerCYL_L
-						// traversalDistance += Abs(currentRequest - previousRequest)
-						// previousRequest = currentRequest
-
 						//travel in reverse direction starting before initial cylinder
 						for i := lowerCYL_L; i < upperCYL_L; i++ {
 
@@ -724,7 +707,6 @@ func c_look(lowerCYL_L int, upperCYL_L int, initCYL_L int, cylinders_L []Cylinde
 	fmt.Printf("C-LOCK traversal count = %d\n", traversalDistance)
 
 }
-
 
 
 func main() {
